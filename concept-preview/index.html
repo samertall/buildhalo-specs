@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BuildHalo — Browser Concept Prototype</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,Arial;background:#061421;color:#eafcff}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0%,#153948 0,#071321 62%);min-height:100vh}header{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:22px 5vw;border-bottom:1px solid #dcffff21}.brand{font-size:27px;font-weight:850;letter-spacing:-.07em}.brand span{color:#81f5e4}.badge{border:1px solid #ffce8a70;border-radius:24px;padding:8px 12px;font-size:11px;color:#ffddaa}main{width:min(1280px,92vw);margin:36px auto;display:grid;grid-template-columns:minmax(400px,1fr) 340px;gap:23px}.stage{position:relative;min-height:540px;overflow:hidden;border:1px solid #a2efec30;border-radius:24px;background:linear-gradient(#112f40 0%,#0c2838 46%,#0b2930 46%,#061a27)}.stage:after{content:"";position:absolute;left:0;right:0;bottom:-7%;height:43%;opacity:.24;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 65px,#81eceb 66px 67px),repeating-linear-gradient(0deg,transparent 0 43px,#81eceb 44px 45px);transform:perspective(600px) rotateX(64deg)}canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}.overlay{position:absolute;left:20px;top:20px;z-index:2;border-radius:14px;padding:14px 18px;background:#071f2edc;border:1px solid #a4fff444;max-width:65%}.eyebrow{font-size:11px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#91f6e6}h1{font-size:22px;line-height:1.15;margin:7px 0}p{line-height:1.55;color:#acc9cf}.overlay p{font-size:13px;margin:0;color:#d6ecf1}.legend{position:absolute;left:20px;bottom:17px;z-index:2;color:#c1e6e9;font-size:10px;letter-spacing:.1em}.panel{background:#0f2a38;border:1px solid #b1ffff2a;border-radius:24px;padding:25px}.panel h2{font-size:22px;line-height:1.25;margin:9px 0}.panel>p{font-size:14px}.progress{font-size:13px;color:#8af5e5;font-weight:800;padding:12px 0}.dots{display:flex;gap:8px;margin:0 0 22px}.dots>div{height:6px;flex:1;background:#385762;border-radius:9px;transition:background .2s}.dots>div.active{background:#8ff6e3}button{border:0;cursor:pointer;font:inherit;font-weight:800;padding:13px 15px;border-radius:12px;width:100%;min-height:50px}button:focus-visible{outline:3px solid white;outline-offset:3px}.primary{background:#84f2df;color:#052431;margin-bottom:10px}.secondary{background:#22505c;color:#efffff}.secondary:disabled{opacity:.35;cursor:not-allowed}.actions{display:flex;gap:10px}.actions button{flex:1}.warning{font-size:12px!important;border-top:1px solid #ffffff26;margin-top:22px;padding-top:16px;color:#ffdda6}footer{font-size:12px;color:#8ca9b4;padding:18px 5vw} @media(max-width:900px){main{display:block}.stage{min-height:450px;margin-bottom:18px}.panel{margin-bottom:20px}}@media(max-width:520px){.stage{min-height:375px}.overlay{max-width:80%}.panel{padding:18px}}
+</style>
+</head>
+<body>
+<header><div class="brand">build<span>halo</span> <small style="font-size:13px;font-weight:400;letter-spacing:0;color:#83b2c4">/ concept</small></div><div class="badge">Browser prototype · NOT SPECS Lens</div></header>
+<main>
+<section class="stage"><canvas id="scene" aria-label="Animated conceptual assembly guide for three piece phone stand"></canvas><div class="overlay" aria-live="polite"><div class="eyebrow" id="stageLabel">Ready</div><h1 id="title">Place the guide</h1><p id="description">Position the work area to begin your assembly.</p></div><div class="legend">SIMULATED SPATIAL GRAPHICS • NOT A LENS STUDIO PREVIEW</div></section>
+<aside class="panel"><div class="eyebrow">Assembly walkthrough</div><h2>Instructions where the work happens.</h2><p>Explore the proposed three-step spatial interaction. This is a browser storyboard, not evidence that a Lens was built with CLAD.</p><div class="progress" id="progress">Not started</div><div class="dots"><div id="d1"></div><div id="d2"></div><div id="d3"></div></div><button id="next" class="primary">Place guide</button><div class="actions"><button id="back" class="secondary">Back</button><button id="replay" class="secondary">Show motion</button></div><p class="warning">Competition requirement: the actual project must be built through CLAD in Lens Studio, tested in SPECS Interactive Preview, and recorded for a public YouTube demo.</p></aside>
+</main>
+<footer>BuildHalo — Learn AR with SPECS · Candidate concept · 2026</footer>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+let state=0,phase=0;
+const steps=[["Place the guide","Position the work area to begin your assembly."],["Align the base","Match the phone stand base to the projected footprint."],["Slide the upright","Follow the glowing insertion path into the base slot."],["Attach the cradle","Guide the cradle into the top support notch."],["Assembly complete","You have explored all three conceptual assembly steps."]];
+const canvas=$("scene"),ctx=canvas.getContext("2d");
+function update(){
+$("title").textContent=steps[state][0];$("description").textContent=steps[state][1];$("stageLabel").textContent=state===0?"READY":state===4?"ALL STEPS COMPLETE":"STEP "+state+" OF 3";$("progress").textContent=state===0?"Not started":state===4?"Complete":"Step "+state+" of 3";$("next").textContent=["Place guide","Done — next","Done — next","Finish","Try again"][state];$("back").disabled=state===0;$("replay").disabled=state===0||state===4;[1,2,3].forEach(i=>$("d"+i).classList.toggle("active",state>=i));
+}
+$("next").addEventListener("click",()=>{state=(state+1)%5;phase=0;update()});$("back").addEventListener("click",()=>{state=Math.max(0,state-1);phase=0;update()});$("replay").addEventListener("click",()=>{phase=0});
+function poly(vertices,fill,stroke="#9ffbed",width=2){ctx.beginPath();vertices.forEach((v,i)=>i?ctx.lineTo(v[0],v[1]):ctx.moveTo(v[0],v[1]));ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.stroke()}
+function line(x1,y1,x2,y2,color="#8df7e8",w=3,dashed=false){ctx.beginPath();ctx.setLineDash(dashed?[10,8]:[]);ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=w;ctx.stroke();ctx.setLineDash([])}
+function draw(){
+const w=canvas.clientWidth,h=canvas.clientHeight,dpr=Math.min(window.devicePixelRatio||1,2);
+if(canvas.width!==Math.floor(w*dpr)||canvas.height!==Math.floor(h*dpr)){canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr)}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);phase+=.022;
+ctx.save();ctx.translate(w*.5,h*.68);const s=Math.min(w/760,h/520);ctx.scale(s,s);
+poly([[-225,-16],[-55,-105],[225,-14],[64,82]],"#214452","#6be7db88",1);poly([[-167,-20],[-43,-83],[160,-14],[48,55]],"#102f3d","#93fff1aa",2);
+if(state>0){poly([[-82,-30],[-28,-55],[81,-24],[30,1]],state>=2?"#3ac6b9":"#4bc9bb66","#a5fff1",2);poly([[-82,-30],[30,1],[30,15],[-82,-16]],"#155766","#7edddc",2);poly([[30,1],[81,-24],[81,-10],[30,15]],"#0c4655","#69dbe4",2);line(9,-25,26,-30,"#c0fff0",4)}
+if(state>=2){const off=state===2?Math.sin(phase*1.6)*13-45:0;poly([[-4,-30+off],[11,-39+off],[20,-170+off],[5,-161+off]],state===2?"#89fff170":"#39bfcf","#b9fff1",3);poly([[5,-161+off],[20,-170+off],[27,-165+off],[12,-156+off]],"#94fff27f","#b6f9ed",2);if(state===2){line(15,-190,15,-83,"#b2fff0",4,true);poly([[15,-68],[4,-86],[26,-86]],"#a1fff0","#d1fffa",1)}}
+if(state>=3){const off=state===3?Math.sin(phase*1.6)*16-54:0;poly([[-24,-158+off],[18,-181+off],[60,-164+off],[16,-142+off]],state===3?"#7cfff16f":"#33b6cc","#b7fff1",3);poly([[16,-142+off],[60,-164+off],[60,-153+off],[16,-132+off]],"#116074","#adf6f0",2);if(state===3){line(20,-219,20,-166,"#b2fff0",4,true);poly([[20,-157],[9,-176],[31,-176]],"#a9fff2","#ddfff9",1)}}
+if(state===1){ctx.font="800 17px system-ui";ctx.fillStyle="#b7fff1";ctx.fillText("PLACE BASE",93,-54);line(90,-52,64,-29,"#a9ffec",2,true)}
+if(state===4){ctx.beginPath();ctx.arc(10,-92,125,0,Math.PI*2);ctx.strokeStyle="#a6ffe9";ctx.lineWidth=4;ctx.stroke();ctx.font="800 25px system-ui";ctx.fillStyle="#bdfff2";ctx.fillText("ASSEMBLED",-94,-235)}
+ctx.restore();requestAnimationFrame(draw);
+}
+update();draw();
+</script>
+</body></html>
