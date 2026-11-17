@@ -1,0 +1,13 @@
+# OS and editor generated files
+.DS_Store
+Thumbs.db
+*.log
+__pycache__/
+*.py[cod]
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Do NOT ignore real Lens Studio project assets, .esproj, .mcp.json,
+# or the official generated devpost/design-brief.md once they exist.
